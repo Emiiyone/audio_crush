@@ -1,0 +1,113 @@
+/* common */
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Arial Unicode MS','Hiragino Kaku Gothic ProN','ヒラギノ角ゴ ProN W3','Arial',;
+    background-color:rgb(70, 70, 70);
+    color:white;
+}
+
+.fileSelect {
+    position: relative;
+}
+.fileImg{
+    position: absolute;
+    top: -140px;
+    left: 20px;;
+    width: 150px;
+    height: 150px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    /* animation: 6s linear infinite menuButtonRotation; */
+    animation: 8s rotate-2d linear infinite; 
+    cursor: pointer;
+ }
+ .fileImg::before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-image: url('btnImg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    -webkit-animation: rotate-2d 10s 1;
+    animation: rotate-2d 10s 1;
+    animation-fill-mode: forwards;
+ }
+ @keyframes rotate-2d{
+    0% {transform: rotate(0);}
+    100% {transform: rotate(360deg);}
+  }
+ .fileImg img{
+    display: block;
+    width: 100%;
+ } 
+
+
+/* index3 */
+
+#container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: black;
+    width: 100%;
+    height: 100%;
+}
+#canvas1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /*filter: blur(10px) contrast(10);*/
+}
+#audio1 {
+    width: 50%;
+    margin: 50px auto;
+    display: block;
+    opacity: 0;
+}
+#fileupload {
+    position: absolute; 
+    top: 65px;
+    color: white;
+    z-index: 100;
+    display: block;
+    opacity: 0;
+}
+
+
+
+/* index2 */
+
+
+#visualizer {
+    background-color:rgb(29, 29, 29);
+}
+.control {
+    position: relative;
+}
+.sliders {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display:flex;
+    justify-content: space-around;
+    letter-spacing: 2px;
+    z-index: 100;
+}
+#change-color {
+    position: absolute;
+    top: 200px;
+    color: white;
+    z-index: 200;
+    display: block;
+}

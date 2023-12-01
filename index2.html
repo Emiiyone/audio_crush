@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Crush</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+    <!-- <input type='file' id='fileupload' accept='audio/*' /> 
+
+        <div id="change-color">
+            <input type="range" id="color" min="0" max="100" value="20">color
+        </div>
+    <div id='container'>
+    
+        <canvas id="canvas1"></canvas>
+        <audio id="audio1" controls></audio>
+        
+</div> -->
+<div class="control"> 
+    <div class="sliders">
+        <input id="file" type="file">
+        pattern<input type="range" min="0" max="360" id="color">
+        size<input type="range" min="0" max="135" id="color_4">
+        circle 1<input type="range" min="1000" max="1800" id="color_2">
+        circle 2<input type="range" min="600" max="1400" id="color_3">
+    </div>
+</div>
+  
+    <canvas id="visualizer" width="600px" height="800px"></canvas>
+
+
+    <script>
+        window.onload = function(){
+        let source, animationId;
+        const audioContext = new AudioContext;
+        const fileReader   = new FileReader;
+    
+        const analyser = audioContext.createAnalyser();
+        analyser.fftSize = 1024; //32, 64, 128, 256, 512, 1024, 2048
+        analyser.connect(audioContext.destination);
+    
+        const canvas        = document.getElementById('visualizer');
+        const canvasContext = canvas.getContext('2d');
+        //canvas.width = window.innerWidth;
+        //canvas.height = window.innerHeight;
+        canvas.setAttribute('width', analyser.frequencyBinCount * 3);
+        fileReader.onload = function(){
+          audioContext.decodeAudioData(fileReader.result, function(buffer){
+            if(source) {
+              source.stop();
+              cancelAnimationFrame(animationId);
+            }
+            source = audioContext.createBufferSource();
+            source.buffer = buffer;
+            source.connect(analyser);
+            source.start(0);
+            animationId = requestAnimationFrame(render);
+          });
+        };
+    
+        document.getElementById('file').addEventListener('change', function(e){
+          fileReader.readAsArrayBuffer(e.target.files[0]);
+        });
+      
+
+        render = function(){
+          spectrums = new Uint8Array(analyser.frequencyBinCount);
+          analyser.getByteFrequencyData(spectrums);
+          canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+          for(i=0, len=spectrums.length; i<len; i++){
+          canvasContext.beginPath();
+          hue = spectrums[i] + 135;
+          c = $("#color").val();
+          a = $("#color_2").val();
+          b = $("#color_3").val();
+          d = $("#color_4").val();
+          canvasContext.fillStyle = 'hsl(' + hue + ', 100%, 50%)';
+          canvasContext.arc(600, 600 - spectrums[i] * 2,d,0,Math.PI*2,false);
+          canvasContext.translate(parseInt(a / 2), parseInt(b / 2));
+          canvasContext.rotate(c * Math.PI / 180);
+
+          canvasContext.translate(parseInt(a / 2 * -1), parseInt(b / 2 * -1));
+          canvasContext.fill();
+          canvasContext.stroke();
+          }
+          animationId = requestAnimationFrame(render);
+        };
+      };
+    </script>
+    
+</body>
+</html>
